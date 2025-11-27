@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 5000;
 // Configure CORS for production
 const corsOptions = {
   origin: process.env.NODE_ENV === 'production' 
-    ? ['https://your-frontend-domain.vercel.app', 'https://your-app-name.onrender.com'] 
+    ? ['https://events-xejq.onrender.com'] 
     : '*',
   credentials: true,
   optionsSuccessStatus: 200
