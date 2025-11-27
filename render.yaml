@@ -1,0 +1,18 @@
+services:
+  # Backend service
+  - type: web
+    name: event-backend
+    env: node
+    buildCommand: npm install
+    startCommand: npm run dev
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: MONGO_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: PHONE_EMAIL_CLIENT_ID
+        sync: false
