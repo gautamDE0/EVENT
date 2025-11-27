@@ -47,11 +47,12 @@ app.get('/', (req, res) => {
   });
 });
 
-// Handle undefined routes
-app.use('*', (req, res) => {
+// 404 handler for undefined routes
+app.use((req, res) => {
   res.status(404).json({
     message: 'Route not found',
-    status: 'error'
+    status: 'error',
+    path: req.originalUrl
   });
 });
 
