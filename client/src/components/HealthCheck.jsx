@@ -12,9 +12,13 @@ const HealthCheck = () => {
   useEffect(() => {
     const checkHealth = async () => {
       try {
+        console.log('Checking health at:', `${API_BASE_URL}/health`);
         // Test the health endpoint specifically
         const response = await axios.get(`${API_BASE_URL}/health`, {
-          timeout: 5000 // 5 second timeout
+          timeout: 10000, // 10 second timeout
+          headers: {
+            'Content-Type': 'application/json',
+          }
         });
         setStatus('Connected');
         setDetails(response.data);
@@ -22,7 +26,31 @@ const HealthCheck = () => {
       } catch (error) {
         console.log('Health check failed:', error);
         setStatus('Disconnected');
-        setDetails(`Error: ${error.message}`);
+        
+        // Provide more detailed error information
+        let errorMessage = 'Unknown error';
+        if (error.response) {
+          // Server responded with error status
+          errorMessage = `Server error: ${error.response.status} - ${error.response.statusText}`;
+          setDetails({
+            message: errorMessage,
+            status: error.response.status,
+            data: error.response.data
+          });
+        } else if (error.request) {
+          // Request was made but no response received
+          errorMessage = 'No response from server. Check if backend is running.';
+          setDetails({
+            message: errorMessage,
+            error: error.message
+          });
+        } else {
+          // Something else happened
+          errorMessage = `Request error: ${error.message}`;
+          setDetails({
+            message: errorMessage
+          });
+        }
         setLoading(false);
       }
     };

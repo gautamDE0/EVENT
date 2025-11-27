@@ -11,7 +11,7 @@ const PORT = process.env.PORT || 5000;
 // Configure CORS for production
 const corsOptions = {
   origin: process.env.NODE_ENV === 'production' 
-    ? ['https://events-xejq.onrender.com'] 
+    ? ['https://events-xejq.onrender.com', 'http://localhost:5173'] 
     : '*',
   credentials: true,
   optionsSuccessStatus: 200
@@ -40,7 +40,19 @@ app.get('/health', (req, res) => {
 
 // Root endpoint
 app.get('/', (req, res) => {
-  res.send('API is running...');
+  res.json({ 
+    message: 'API is running...',
+    status: 'success',
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Handle undefined routes
+app.use('*', (req, res) => {
+  res.status(404).json({
+    message: 'Route not found',
+    status: 'error'
+  });
 });
 
 app.listen(PORT, () => {
