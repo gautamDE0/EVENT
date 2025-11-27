@@ -12,9 +12,16 @@ const HealthCheck = () => {
   useEffect(() => {
     const checkHealth = async () => {
       try {
-        console.log('Checking health at:', `${API_BASE_URL}/health`);
+        // Ensure we have a proper base URL without trailing slash
+        const baseUrl = API_BASE_URL.endsWith('/') 
+          ? API_BASE_URL.slice(0, -1) 
+          : API_BASE_URL;
+        
+        const healthUrl = `${baseUrl}/health`;
+        console.log('Checking health at:', healthUrl);
+        
         // Test the health endpoint specifically
-        const response = await axios.get(`${API_BASE_URL}/health`, {
+        const response = await axios.get(healthUrl, {
           timeout: 10000, // 10 second timeout
           headers: {
             'Content-Type': 'application/json',

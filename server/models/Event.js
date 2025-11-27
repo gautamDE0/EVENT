@@ -1,7 +1,19 @@
 const mongoose = require('mongoose');
 
 const eventSchema = mongoose.Schema({
-    name: {
+    title: {
+        type: String,
+        required: true,
+    },
+    date: {
+        type: Date,
+        required: true,
+    },
+    time: {
+        type: String,
+        required: true,
+    },
+    venue: {
         type: String,
         required: true,
     },
@@ -10,15 +22,7 @@ const eventSchema = mongoose.Schema({
         required: true,
         enum: ['CSE', 'ECE', 'Mechanical', 'Civil', 'ISE', 'Other'],
     },
-    lastDate: {
-        type: Date,
-        required: true,
-    },
-    venue: {
-        type: String,
-        required: true,
-    },
-    registrationLink: {
+    link: {
         type: String,
         required: true,
     },

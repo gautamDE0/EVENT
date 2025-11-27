@@ -49,15 +49,16 @@ router.get('/', async (req, res) => {
 // @route   POST /api/events
 // @access  Private/Admin
 router.post('/', protectAdmin, async (req, res) => {
-    const { name, branch, lastDate, venue, registrationLink } = req.body;
+    const { title, date, time, venue, branch, link } = req.body;
 
     try {
         const event = new Event({
-            name,
-            branch,
-            lastDate,
+            title,
+            date,
+            time,
             venue,
-            registrationLink,
+            branch,
+            link,
         });
 
         const createdEvent = await event.save();
@@ -71,17 +72,18 @@ router.post('/', protectAdmin, async (req, res) => {
 // @route   PUT /api/events/:id
 // @access  Private/Admin
 router.put('/:id', protectAdmin, async (req, res) => {
-    const { name, branch, lastDate, venue, registrationLink } = req.body;
+    const { title, date, time, venue, branch, link } = req.body;
 
     try {
         const event = await Event.findById(req.params.id);
 
         if (event) {
-            event.name = name || event.name;
-            event.branch = branch || event.branch;
-            event.lastDate = lastDate || event.lastDate;
+            event.title = title || event.title;
+            event.date = date || event.date;
+            event.time = time || event.time;
             event.venue = venue || event.venue;
-            event.registrationLink = registrationLink || event.registrationLink;
+            event.branch = branch || event.branch;
+            event.link = link || event.link;
 
             const updatedEvent = await event.save();
             res.json(updatedEvent);
