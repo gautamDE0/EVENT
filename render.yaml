@@ -3,7 +3,7 @@ services:
   - type: web
     name: event-backend
     env: node
-    buildCommand: npm install && npm run build
+    buildCommand: npm install
     startCommand: npm start
     envVars:
       - key: NODE_ENV

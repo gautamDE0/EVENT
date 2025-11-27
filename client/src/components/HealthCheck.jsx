@@ -12,13 +12,17 @@ const HealthCheck = () => {
   useEffect(() => {
     const checkHealth = async () => {
       try {
-        const response = await axios.get(`${API_BASE_URL}/health`);
+        // Test the health endpoint specifically
+        const response = await axios.get(`${API_BASE_URL}/health`, {
+          timeout: 5000 // 5 second timeout
+        });
         setStatus('Connected');
         setDetails(response.data);
         setLoading(false);
       } catch (error) {
+        console.log('Health check failed:', error);
         setStatus('Disconnected');
-        setDetails(error.message);
+        setDetails(`Error: ${error.message}`);
         setLoading(false);
       }
     };
