@@ -1,10 +1,6 @@
 {
   "root": "dist/",
-  "clean_urls": false,
-  "routes": [
-    {
-      "src": "/[^.]+",
-      "dest": "/index.html"
-    }
-  ]
+  "routes": {
+    "/**": "index.html"
+  }
 }
