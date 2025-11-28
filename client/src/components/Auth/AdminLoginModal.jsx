@@ -16,13 +16,33 @@ const AdminLoginModal = ({ isOpen, onClose }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            console.log('Attempting admin login with:', { email, password });
+            console.log('API Base URL:', API_BASE_URL);
+            
             const res = await axios.post(`${API_BASE_URL}/api/auth/admin-login`, { email, password });
+            console.log('Admin login response:', res.data);
+            
             localStorage.setItem('token', res.data.token);
             localStorage.setItem('role', 'admin');
             navigate('/admin/dashboard');
         } catch (err) {
-            console.error(err);
-            alert('Admin login failed');
+            console.error('Admin login error:', err);
+            
+            // Provide more detailed error information
+            let errorMessage = 'Admin login failed';
+            if (err.response) {
+                // Server responded with error status
+                errorMessage = err.response.data.message || `Server error: ${err.response.status}`;
+            } else if (err.request) {
+                // Request was made but no response received
+                errorMessage = 'No response from server. Check if backend is running.';
+            } else {
+                // Something else happened
+                errorMessage = err.message;
+            }
+            
+            console.error('Admin login failed:', errorMessage);
+            alert(errorMessage);
         }
     };
 
@@ -45,22 +65,20 @@ const AdminLoginModal = ({ isOpen, onClose }) => {
                                 <X size={20} />
                             </button>
                         </div>
-
                         <div className="modal-body">
-                            <form onSubmit={handleSubmit} className="space-y-5">
-                                <div>
-                                    <label className="label">Admin Email</label>
+                            <form onSubmit={handleSubmit}>
+                                <div className="form-group">
+                                    <label className="label">Email</label>
                                     <input
                                         type="email"
                                         className="input"
                                         value={email}
                                         onChange={(e) => setEmail(e.target.value)}
-                                        placeholder="admin@event.com"
+                                        placeholder="admin@bmsce.ac.in"
                                         required
                                     />
                                 </div>
-
-                                <div>
+                                <div className="form-group">
                                     <label className="label">Password</label>
                                     <input
                                         type="password"
@@ -71,13 +89,21 @@ const AdminLoginModal = ({ isOpen, onClose }) => {
                                         required
                                     />
                                 </div>
-
-                                <button
-                                    type="submit"
-                                    className="btn btn-primary"
-                                >
-                                    Login as Admin
-                                </button>
+                                <div className="modal-footer">
+                                    <button
+                                        type="button"
+                                        onClick={onClose}
+                                        className="btn btn-secondary"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        type="submit"
+                                        className="btn btn-primary"
+                                    >
+                                        Login
+                                    </button>
+                                </div>
                             </form>
                         </div>
                     </motion.div>

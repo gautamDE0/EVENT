@@ -15,12 +15,32 @@ const StudentLogin = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+            console.log('Attempting login with:', { email, password });
+            console.log('API Base URL:', API_BASE_URL);
+            
             const res = await axios.post(`${API_BASE_URL}/api/auth/login`, { email, password });
+            console.log('Login response:', res.data);
+            
             localStorage.setItem('token', res.data.token);
             navigate('/student/dashboard');
         } catch (err) {
-            console.error(err);
-            alert('Login failed');
+            console.error('Login error:', err);
+            
+            // Provide more detailed error information
+            let errorMessage = 'Login failed';
+            if (err.response) {
+                // Server responded with error status
+                errorMessage = err.response.data.message || `Server error: ${err.response.status}`;
+            } else if (err.request) {
+                // Request was made but no response received
+                errorMessage = 'No response from server. Check if backend is running.';
+            } else {
+                // Something else happened
+                errorMessage = err.message;
+            }
+            
+            console.error('Login failed:', errorMessage);
+            alert(errorMessage);
         }
     };
 
